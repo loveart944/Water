@@ -1,0 +1,659 @@
+:root {
+    /* Chocolate Brown color scheme */
+    --primary-color: #6F3A14; /* Darker chocolate brown */
+    --secondary-color: #8B4513; /* Lighter chocolate brown */
+    --background-color: #f5f9fc;
+    --card-background: #fff;
+    --text-color: #333;
+    --light-text: #777;
+    --border-color: #ddd;
+    --success-color: #2ecc71; /* Green for success */
+    --warning-color: #f39c12; /* Orange for caution/almost there */
+    --danger-color: #e74c3c; /* Red for reset/warning */
+    --nav-bg: #fff; /* Background for navigation */
+    --nav-item-active: var(--primary-color);
+
+    /* Theme specific variables (default to light) */
+    --body-bg-theme: var(--background-color);
+    --container-bg-theme: var(--card-background);
+    --text-color-theme: var(--text-color);
+    --card-shadow-theme: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --border-color-theme: var(--border-color);
+    --chart-grid-color: rgba(0, 0, 0, 0.05); /* Light grid lines for chart */
+    --chart-text-color: #666; /* Light text for chart labels */
+}
+
+/* Dark Theme */
+body.dark-theme {
+    --body-bg-theme: #2c2c2c;
+    --container-bg-theme: #3c3c3c;
+    --text-color-theme: #f0f0f0;
+    --light-text: #bbb;
+    --card-shadow-theme: 0 5px 15px rgba(0, 0, 0, 0.3);
+    --border-color-theme: #555;
+    --nav-bg: #3c3c3c;
+    --nav-item-active: #9B6C3B; /* Slightly different active color for dark mode */
+    --chart-grid-color: rgba(255, 255, 255, 0.1); /* Darker grid lines for chart */
+    --chart-text-color: #ccc; /* Lighter text for chart labels */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--body-bg-theme);
+    color: var(--text-color-theme);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 500px;
+    margin: 20px auto 70px auto; /* Increased bottom margin for nav bar */
+    padding: 20px;
+    background-color: var(--container-bg-theme);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow-theme);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color-theme);
+    transition: border-color 0.3s;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.8rem;
+}
+
+header p {
+    color: var(--light-text);
+    font-size: 0.95rem;
+}
+
+.main-content {
+    flex: 1;
+    position: relative; /* For absolute positioning of pages if needed */
+}
+
+/* Page specific styles */
+.page {
+    display: none; /* Hide all pages by default */
+    animation: fadeIn 0.5s ease-out; /* Simple fade in animation */
+}
+
+.page.active {
+    display: block; /* Show active page */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    background-color: var(--container-bg-theme); /* Cards use container background for consistency */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 10px;
+}
+
+/* Home Page Specifics (largely retained) */
+.goal-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.goal-controls button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.2s ease;
+    font-size: 1.2rem;
+}
+
+.goal-controls button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+#goal-amount {
+    transition: color 0.3s ease;
+}
+
+.progress-container {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 35px;
+    background-color: #e0e0e0; /* Fixed for progress bar bg */
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: width 0.6s ease-out, background-color 0.3s;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.progress-text {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.15rem;
+    min-width: 50px;
+}
+
+.intake-display {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: var(--text-color-theme); /* Adapts to theme */
+}
+
+.intake-display span:first-child {
+    color: var(--primary-color);
+}
+
+.intake-display span:last-child {
+    color: var(--light-text);
+    font-size: 1.2rem;
+}
+
+
+.water-amounts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.water-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.water-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.custom-amount {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.custom-amount input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color-theme);
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    background-color: var(--container-bg-theme); /* Input background */
+    color: var(--text-color-theme); /* Input text color */
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+
+.custom-amount input:focus {
+    border-color: var(--primary-color);
+}
+
+.custom-amount button {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.custom-amount button:hover {
+    background-color: #27ae60;
+    transform: scale(1.02);
+}
+
+#history-list {
+    list-style-type: none;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+#history-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    font-size: 0.95rem;
+}
+
+#history-list li:last-child {
+    border-bottom: none;
+}
+
+#history-list li span:first-child {
+    color: var(--light-text);
+    font-size: 0.85rem;
+}
+
+#history-list li span:last-child {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#empty-history {
+    color: var(--light-text);
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    background-color: var(--body-bg-theme); /* Background for empty history */
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+footer {
+    width: 100%;
+    background-color: var(--nav-bg);
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: var(--light-text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: color 0.3s, background-color 0.3s;
+    flex: 1; /* Distribute space evenly */
+}
+
+.nav-button i {
+    font-size: 1.4rem;
+    margin-bottom: 3px;
+}
+
+.nav-button.active {
+    color: var(--nav-item-active);
+    /* background-color: rgba(0, 0, 0, 0.05); /* Subtle highlight */
+}
+
+
+#reset-day {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 20px; /* Space from other elements on Home page */
+    display: block; /* Make it a block element to take full width */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#reset-day:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+
+
+
+/* --- History Page Styles --- */
+.history-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.history-controls button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+.history-controls button:hover {
+    color: var(--secondary-color);
+}
+
+/* Update chart placeholder to be just a container for canvas */
+.history-chart-placeholder {
+    height: 220px; /* Increased height for better chart visibility */
+    margin-bottom: 20px;
+    position: relative; /* Needed for Chart.js responsiveness */
+    background-color: transparent; /* No background needed for placeholder */
+    display: block; /* Ensure it's not flex/center aligning content */
+}
+#waterChart {
+    background-color: var(--container-bg-theme); /* Chart background */
+    border-radius: 10px;
+    padding: 10px; /* Padding inside chart area */
+}
+
+
+.history-view-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.history-view-toggle button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+}
+.history-view-toggle button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.history-view-toggle button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.history-view-toggle button:not(.active) {
+    background-color: var(--border-color);
+    color: var(--text-color-theme);
+}
+.history-view-toggle button:hover:not(.active) {
+    background-color: #ccc;
+}
+
+
+.weekly-completion {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}
+.weekly-completion-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--light-text);
+}
+.weekly-completion-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+/* Example for a completed day */
+.weekly-completion-circle.completed {
+    background-color: var(--success-color);
+}
+/* Example for today (optional) */
+.weekly-completion-circle.today {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: none;
+}
+/* Example for pending/not yet */
+.weekly-completion-circle.not-met {
+    background-color: var(--danger-color); /* Red for not met */
+}
+.weekly-completion-circle.future {
+    background-color: var(--border-color); /* Grey for future */
+    color: var(--light-text);
+}
+
+
+.report-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+.report-item:last-child {
+    border-bottom: none;
+}
+.report-item .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+}
+.report-item span {
+    font-size: 0.95rem;
+}
+.report-item .value {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.indicator.green { background-color: var(--success-color); }
+.indicator.blue { background-color: var(--primary-color); }
+.indicator.orange { background-color: var(--warning-color); }
+.indicator.red { background-color: var(--danger-color); }
+
+/* --- Settings Page Styles --- */
+.settings-group {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.settings-group:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.05);
+}
+.settings-item:last-child {
+    border-bottom: none;
+}
+.settings-item label {
+    font-size: 1rem;
+    color: var(--text-color-theme);
+}
+.settings-item .value {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.settings-item input[type="number"] {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid var(--border-color-theme);
+    border-radius: 5px;
+    background-color: var(--container-bg-theme);
+    color: var(--text-color-theme);
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+.settings-item input[type="number"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+.settings-item select {
+    padding: 8px;
+    border: 1px solid var(--border-color-theme);
+    border-radius: 5px;
+    background-color: var(--container-bg-theme);
+    color: var(--text-color-theme);
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+.settings-item select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 22px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: var(--success-color);
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--success-color);
+}
+input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        margin: 10px auto 60px auto; /* Adjust margin for smaller screens */
+    }
+
+    .water-amounts {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .card {
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 1.6rem;
+    }
+    footer {
+        padding: 8px 0;
+    }
+    .nav-button {
+        font-size: 0.75rem;
+    }
+    .nav-button i {
+        font-size: 1.2rem;
+    }
+}

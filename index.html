@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tint"></i> Water Tracker</h1>
+            <p>Stay hydrated throughout the day</p>
+        </header>
+
+        <div class="main-content">
+            <div id="home-page" class="page active">
+                <div class="card">
+                    <h2>Daily Goal</h2>
+                    <div class="goal-controls">
+                        <button id="decrease-goal"><i class="fas fa-minus"></i></button>
+                        <span id="goal-amount">2000</span> ml
+                        <button id="increase-goal"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="progress-container card">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+
+                <div class="intake-display">
+                    <span id="consumed">0</span> / <span id="goal">2000 ml</span>
+                </div>
+
+                <div class="card">
+                    <h2>Add Water</h2>
+                    <div class="water-amounts">
+                        <button class="water-btn" data-amount="100">100ml</button>
+                        <button class="water-btn" data-amount="250">250ml</button>
+                        <button class="water-btn" data-amount="500">500ml</button>
+                        <button class="water-btn" data-amount="750">750ml</button>
+                        <button class="water-btn" data-amount="1000">1000ml</button>
+                        <button class="water-btn" data-amount="1500">1500ml</button>
+                    </div>
+                    <div class="custom-amount">
+                        <input type="number" id="custom-amount" placeholder="Custom amount (ml)" min="1">
+                        <button id="add-custom">Add</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Today's Intake History</h2>
+                    <ul id="history-list"></ul>
+                    <div id="empty-history">No water logged yet today.</div>
+                </div>
+
+                <button id="reset-day">Reset Today's Progress</button>
+            </div>
+
+            <div id="history-page" class="page">
+                <div class="card">
+                    <div class="history-controls">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <span id="current-month-year">June 2025</span>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+
+                    <div class="history-chart-placeholder">
+                        <canvas id="waterChart"></canvas>
+                    </div>
+
+                    <div class="history-view-toggle">
+                        <button id="month-view-btn" class="active">Month</button>
+                        <button id="year-view-btn">Year</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Weekly Completion</h2>
+                    <div class="weekly-completion" id="weekly-completion-container">
+                        </div>
+                </div>
+
+                <div class="card">
+                    <h2>Drink Water Report</h2>
+                    <div class="report-item">
+                        <span class="indicator green"></span><span>Weekly average</span>
+                        <span class="value" id="weekly-avg">0 ml / day</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="indicator blue"></span><span>Monthly average</span>
+                        <span class="value" id="monthly-avg">0 ml / day</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="indicator orange"></span><span>Average completion</span>
+                        <span class="value" id="avg-completion">0%</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Drink Frequency</h2>
+                    <div class="report-item">
+                        <span class="indicator red"></span><span>Today's frequency</span>
+                        <span class="value" id="drink-frequency">0 times / day</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-page" class="page">
+                <div class="card">
+                    <div class="settings-group">
+                        <h2>Reminder Settings</h2>
+                        <div class="settings-item">
+                            <label>Reminder schedule</label>
+                            <div class="value">
+                                <span>8:00 - 22:00</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label>Reminder mode</label>
+                            <div class="value">
+                                <span>As device settings</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label>Further reminder</label>
+                            <div class="value">
+                                <span>Still remind when your goal is achieved</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="further-reminder-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h2>General</h2>
+                        <div class="settings-item">
+                            <label for="theme-toggle">Light or dark interface</label>
+                            <div class="value">
+                                <span id="theme-text">Light</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="theme-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label for="unit-select">Unit</label>
+                            <div class="value">
+                                <select id="unit-select">
+                                    <option value="ml">ml</option>
+                                    <option value="oz">oz</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label for="settings-intake-goal">Intake goal</label>
+                            <div class="value">
+                                <input type="number" id="settings-intake-goal" min="250" step="250"> ml
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label for="language-select">Language</label>
+                            <div class="value">
+                                <select id="language-select">
+                                    <option value="default">Default</option>
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h2>Personal Information</h2>
+                        <div class="settings-item">
+                            <label for="gender-select">Gender</label>
+                            <div class="value">
+                                <select id="gender-select">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label for="weight-input">Weight</label>
+                            <div class="value">
+                                <input type="number" id="weight-input" min="1" step="1"> kg
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <button class="nav-button active" data-page="home-page" id="nav-home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-button" data-page="history-page" id="nav-history">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </button>
+            <button class="nav-button" data-page="settings-page" id="nav-settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
