@@ -220,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    
     function addWater(amount) {
         if (amount <= 0 || isNaN(amount)) {
             alert("Please enter a valid amount greater than 0.");
@@ -609,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // For now, it will just switch the active class.
     });
 
-    
+
 
    // --- Settings Page Functions ---
 
